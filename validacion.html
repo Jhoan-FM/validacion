@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Validar Cédula Dominicana</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input, button {
+      padding: 8px;
+      font-size: 16px;
+    }
+    #resultado {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Validador de Cédula Dominicana (Módulo 10)</h2>
+
+  <label for="cedula">Ingrese la cédula (sin guiones):</label><br>
+  <input type="text" id="cedula" maxlength="11" placeholder="Ej: 00112345678">
+  <button onclick="validarCedula()">Validar</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function validarCedula() {
+      const cedula = document.getElementById("cedula").value.trim();
+      const resultado = document.getElementById("resultado");
+
+      if (!/^\d{11}$/.test(cedula)) {
+        resultado.textContent = "La cédula debe tener 11 dígitos numéricos.";
+        resultado.style.color = "red";
+        return;
+      }
+
+      let suma = 0;
+      const multiplicadores = [1, 2];
+
+      for (let i = 0; i < 10; i++) {
+        let digito = parseInt(cedula[i], 10);
+        let mult = digito * multiplicadores[i % 2];
+        if (mult > 9) mult = Math.floor(mult / 10) + (mult % 10);
+        suma += mult;
+      }
+
+      const digitoVerificador = parseInt(cedula[10], 10);
+      const calculado = (10 - (suma % 10)) % 10;
+
+      if (calculado === digitoVerificador) {
+        resultado.textContent = "Cédula válida.";
+        resultado.style.color = "green";
+      } else {
+        resultado.textContent = "Cédula inválida.";
+        resultado.style.color = "red";
+      }
+    }
+  </script>
+
+</body>
+</html>
